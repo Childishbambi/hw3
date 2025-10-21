@@ -17,7 +17,56 @@ public:
     void pop();  // throws std::underflow_error if empty
     const T& top() const; // throws std::underflow_error if empty
     // Add other members only if necessary
+private:
+    std::vector<T> data;
 };
 
+template <typename T>
+Stack<T>::Stack()
+{
+  
+}
+
+template <typename T>
+Stack<T>::~Stack()
+{
+  
+}
+
+template <typename T>
+bool Stack<T>::empty() const
+{
+  return std::vector<T>::empty();
+}
+
+template <typename T>
+size_t Stack<T>::size() const
+{
+  return std::vector<T>::size();
+}
+
+template <typename T>
+void Stack<T>::push(const T& item)
+{
+  std::vector<T>::push_back(item);
+}
+
+template <typename T>
+void Stack<T>::pop()
+{
+  if(std::vector<T>::empty()){
+    throw std::underflow_error;
+  }
+  std::vector<T>::pop_back();
+}
+
+template <typename T>
+const T& Stack<T>::top()
+{
+  if(std::vector<T>::empty()){
+    throw std::underflow_error;
+  }
+  return std::vector<T>::back();
+}
 
 #endif

@@ -27,6 +27,12 @@ void print(Node* head);
  */
 void dealloc(Node* head);
 
+/**
+ * Checks if the value is odd
+ */
+
+bool odd(int value);
+
 
 Node* readList(const char* filename)
 {
@@ -67,7 +73,13 @@ void dealloc(Node* head)
 //   function object struct declarations
 // -----------------------------------------------
 
-
+bool odd(int value){
+    if((value % 2) != 0){
+        return true;
+    } else {
+        return false;
+    }
+}
 
 
 
@@ -86,6 +98,22 @@ int main(int argc, char* argv[])
     print(head);
 
     // Test out your linked list code
+    Node* smaller = NULL;
+    Node* larger = NULL;
+    llpivot(head, smaller, larger, 8);
+    cout << "\nSmaller lists: ";
+    print(smaller);
+    cout << "\nLarger lists: ";
+    print(larger);
+
+    // Deletes the odd numbers
+    smaller = llfilter(smaller, odd);
+    cout << "\nSmaller lists: ";
+    print(smaller);
+
+
+    dealloc(larger);
+    dealloc(smaller);
 
 
 
