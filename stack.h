@@ -1,6 +1,7 @@
 #ifndef STACK_H
 #define STACK_H
 
+
 #include <vector>
 #include <stdexcept>
 
@@ -36,37 +37,37 @@ Stack<T>::~Stack()
 template <typename T>
 bool Stack<T>::empty() const
 {
-  return std::vector<T>::empty();
+  return data.empty();
 }
 
 template <typename T>
 size_t Stack<T>::size() const
 {
-  return std::vector<T>::size();
+  return data.size();
 }
 
 template <typename T>
 void Stack<T>::push(const T& item)
 {
-  std::vector<T>::push_back(item);
+  data.push_back(item);
 }
 
 template <typename T>
 void Stack<T>::pop()
 {
-  if(std::vector<T>::empty()){
-    throw std::underflow_error;
+  if(data.empty()){
+    throw std::underflow_error("error");
   }
-  std::vector<T>::pop_back();
+  data.pop_back();
 }
 
 template <typename T>
-const T& Stack<T>::top()
+const T& Stack<T>::top() const
 {
-  if(std::vector<T>::empty()){
-    throw std::underflow_error;
+  if(data.empty()){
+    throw std::underflow_error("error");
   }
-  return std::vector<T>::back();
+  return data.back();
 }
 
 #endif

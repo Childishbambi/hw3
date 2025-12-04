@@ -3,8 +3,9 @@
 #include <functional>
 #include <stdexcept>
 #include <vector>
+#include <utility>
 
-template <typename T, typename PComparator = std::less<T> >
+template <typename T, typename PComparator = std::less<T>>
 class Heap
 {
 public:
@@ -62,6 +63,8 @@ public:
 
 private:
   /// Add whatever helper functions and data members you need below
+  int m_;
+  PComparator c_;
   void trickleDown(int id);
   void trickleUp(int id);
   std::vector<T> items_;
@@ -72,7 +75,8 @@ private:
 
 template <typename T, typename PComparator>
 Heap<T,PComparator>::Heap(int m, PComparator c) {
-  
+  m_ = m;
+  c_ = c;
 }
 
 template <typename T, typename PComparator>
@@ -97,11 +101,11 @@ T const & Heap<T,PComparator>::top() const
     // ================================
     // throw the appropriate exception
     // ================================
-    throw(std::out_of_range());
+    throw(std::out_of_range("empty"));
   }
   // If we get here we know the heap has at least 1 item
   // Add code to return the top element
-  return items_[1];
+  return items_[0];
 
 }
 
@@ -115,11 +119,11 @@ void Heap<T,PComparator>::pop()
     // ================================
     // throw the appropriate exception
     // ================================
-    throw(std::out_of_range());
+    throw(std::out_of_range("empty"));
   }
-  items_[1] = items_.back();
+  items_[0] = items_.back();
   items_.pop_back();
-  trickleDown(1);
+  trickleDown(0);
 }
 
 template <typename T, typename PComparator>
@@ -134,35 +138,38 @@ bool Heap<T,PComparator>::empty() const {
 
 template <typename T, typename PComparator>
 void Heap<T,PComparator>::trickleDown(int id){
-  if (((2 * id) + 1) >= items_.size()) {
+
+  if (((m_ * id) + 1) >= items_.size()) {
     return;
   }
 
-  int smallestC = 2 * id + 1;
-  if (2 * id + 2 < items_.size()){
-    int rightC = 2 * id + 2;
-    if (items_[rightC] < items_[smallestC]){
-      smallestC = rightC;
+  int smallestC = m_ * id + 1;
+  for(size_t i = 2; i <= m_; i++){
+    size_t c = m_ * id + i;
+    if(c < items_.size() && c_(items_[c], items_[smallestC])){
+      smallestC = c;
     }
   }
 
-  if(items_[id] > items_[smallestC]){
-    swap(items_[id], items_[smallestC]);
+  if(c_(items_[smallestC],items_[id])){
+    std::swap(items_[id], items_[smallestC]);
     trickleDown(smallestC);
   }
 }
 
 template <typename T, typename PComparator>
 void Heap<T,PComparator>::trickleUp(int id){
-  if (((id - 1)/2) < 1) {
-    return;
+
+  while(id > 0){
+    int p = ((id - 1) / m_);
+    if(c_(items_[id],items_[p])){
+      std::swap(items_[p], items_[id]);
+      id = p;
+    } else {
+      return;
+    }
   }
 
-  int parent = (id - 1)/2;
-  if(items_[id] < items_[parent]){
-    swap(items_[parent], items_[id]);
-    trickleDown(parent);
-  }
 }
 
 #endif
